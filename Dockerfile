@@ -1,0 +1,25 @@
+ARG VER=latest
+FROM ramirezfx/ubuntu-baseimage:$VER
+ENV SHELL=/bin/bash
+
+RUN apt update
+
+# Intall Basic-Software and Software needed during installation
+RUN apt-get install -y git cups wget
+
+# Download latest nomachine-server
+RUN DLLINK=$(wget --save-headers --output-document - https://downloads.nomachine.com/de/download/?id=5 | grep download.nomachine.com | cut -d '"' -f6 | head -1) && wget -O nomachine.deb $DLLINK && dpkg -i nomachine.deb
+
+# ADD nxserver.sh
+RUN wget -O /nxserver.sh https://github.com/ramirezfx/xubuntu-desktop/raw/main/nxserver.sh && chmod +x /nxserver.sh
+
+# Custom Packages And Sripts:
+RUN wget -O /custom.sh https://github.com/ramirezfx/xubuntu-desktop/raw/main/custom.sh && chmod +x /custom.sh
+
+# Add Language-Support:
+RUN wget -O /tmp/languages.txt https://github.com/ramirezfx/xubuntu-desktop/raw/main/languages.txt && xargs -a /tmp/languages.txt apt-get install -y
+RUN rm -Rf /etc/localtime
+
+RUN /custom.sh
+
+ENTRYPOINT ["/nxserver.sh"]
