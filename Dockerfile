@@ -8,7 +8,7 @@ RUN apt update
 RUN apt-get install -y git cups wget
 
 # Download latest nomachine-server
-RUN DLLINK=$(wget --save-headers --output-document - https://downloads.nomachine.com/de/download/?id=5 | grep download.nomachine.com | cut -d '"' -f6 | head -1) && wget -O nomachine.deb $DLLINK && dpkg -i nomachine.deb
+RUN DLLINK=$(wget --save-headers --output-document - https://downloads.nomachine.com/de/download/?id=3 | grep download.nomachine.com | cut -d '"' -f6 | head -1) && wget -O nomachine.deb $DLLINK && dpkg -i nomachine.deb
 
 # ADD nxserver.sh
 RUN wget -O /nxserver.sh https://github.com/ramirezfx/ubuntu-desktop/raw/main/nxserver.sh && chmod +x /nxserver.sh
